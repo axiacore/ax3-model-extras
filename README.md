@@ -36,7 +36,7 @@ class Post(models.Model):
 
     image = models.ImageField(
         upload_to=get_upload_path,
-        storage=get_storage,
+        storage=get_storage(),
     )
 ```
 
