@@ -19,6 +19,23 @@ class Post(models.Model):
     )
 ```
 
+If you want to validate one dimension, you have to send the other dimension with 0
+
+```
+from ax3_model_extras.validators import FileSizeValidator, ImageDimensionValidator
+
+
+class Post(models.Model):
+    title = models.CharField()
+
+    slug = models.SlugField()
+
+    image = models.ImageField(
+        validators=[ImageDimensionValidator([1920, 0]), FileSizeValidator(350)],
+        help_text='JPG. width=1920px. 350kb max.',
+    )
+```
+
 
 
 ## Improve file storage

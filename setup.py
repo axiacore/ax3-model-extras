@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="AX3 model extras",
-    version="1.0.0",
+    version="1.0.1",
     author="Axiacore",
     author_email="info@axiacore.com",
     description="Extras for AX3 models",
