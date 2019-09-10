@@ -19,4 +19,10 @@ class ImageDimensionValidator(BaseValidator):
 
     def compare(self, a, b):
         width, height = b
+        if width == 0:
+            return a.height != height
+
+        if height == 0:
+            return a.width != width
+
         return a.width != width or a.height != height
