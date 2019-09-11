@@ -1,9 +1,11 @@
 from io import BytesIO
 
 from django.db.models import ImageField
+from django.core.exceptions import ValidationError
 
 from PIL import Image
 from resizeimage import resizeimage
+from resizeimage.imageexceptions import ImageSizeError
 
 
 class OptimizedImageField(ImageField):
@@ -31,11 +33,14 @@ class OptimizedImageField(ImageField):
         updating_image = True if data and getattr(instance, self.name) != data else False
 
         if updating_image:
-            data = self.optimize_image(
-                image_data=data,
-                output_size=self.optimized_image_output_size,
-                resize_method=self.optimized_image_resize_method
-            )
+            try:
+                data = self.optimize_image(
+                    image_data=data,
+                    output_size=self.optimized_image_output_size,
+                    resize_method=self.optimized_image_resize_method
+                )
+            except ImageSizeError:
+                raise ValidationError({self.name: ['Imagen demasiado pequeña para ser escalada']})
 
         super().save_form_data(instance, data)
 
