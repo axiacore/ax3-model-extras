@@ -1,4 +1,6 @@
 from io import BytesIO
+import os.path
+import subprocess
 
 from django.db.models import ImageField
 from django.core.exceptions import ValidationError
@@ -28,10 +30,20 @@ class OptimizedImageField(ImageField):
 
         return name, path, args, kwargs
 
-    def save_form_data(self, instance, data):
-        # Are we updating an image?
-        updating_image = True if data and getattr(instance, self.name) != data else False
+    def pre_save(self, model_instance, add):
+        file = super().pre_save(model_instance, add)
 
+        webp_path = f'{os.path.splitext(file.path)[0]}.webp'
+        if not os.path.exists(webp_path):
+            if file.name.lower().endswith('.png'):
+                subprocess.run(['cwebp', '-quiet', '-lossless', file.path, '-o', webp_path])
+            else:
+                subprocess.run(['cwebp', '-quiet', '-q', '80', file.path, '-o', webp_path])
+
+        return file
+
+    def save_form_data(self, instance, data):
+        updating_image = True if data and getattr(instance, self.name) != data else False
         if updating_image:
             try:
                 data = self.optimize_image(
