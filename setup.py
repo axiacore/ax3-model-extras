@@ -1,11 +1,13 @@
 import setuptools
 
+__VERSION__ = '1.1.1'
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="AX3 model extras",
-    version="1.1.0",
+    version=__VERSION__,
     author="Axiacore",
     author_email="info@axiacore.com",
     description="Extras for AX3 models",
