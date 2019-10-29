@@ -72,21 +72,25 @@ class OptimizedImageField(ImageField):
 
     def optimize_image(self, image_data, output_size, resize_method):
         """Optimize an image that has not been saved to a file."""
-        image = Image.open(image_data)
+        img = Image.open(image_data)
 
-        self._image_format = image.format
+        self._image_format = img.format
         if self._image_format not in self.optimized_file_formats:
             raise ValidationError({self.name: ['Formato de imagen no soportado']})
 
+        # GIF files needs strict size validation
+        if self._image_format == 'GIF' and output_size and output_size != (img.width, img.height):
+            raise ValidationError({self.name: ['Tamaño de imagen GIF no soportado']})
+
+        # Check if is a supported format for optimization
         if self._image_format not in ['JPEG', 'PNG']:
-            # Only optimize JPEG and PNG images
             return image_data
 
         # If output_size is set, resize the image with the selected resize_method.
-        if output_size:
-            output_image = resizeimage.resize(resize_method, image, output_size)
+        if output_size and output_size != (img.width, img.height):
+            output_image = resizeimage.resize(resize_method, img, output_size)
         else:
-            output_image = image
+            output_image = img
 
         # If the file extension is JPEG, convert the output_image to RGB
         if self._image_format == 'JPEG':
