@@ -2,8 +2,9 @@ from io import BytesIO
 import os.path
 import subprocess
 
-from django.db.models import ImageField
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
+from django.db.models import ImageField
 
 from PIL import Image
 from resizeimage import resizeimage
@@ -34,11 +35,18 @@ class OptimizedImageField(ImageField):
         file = super().pre_save(model_instance, add)
 
         webp_path = f'{os.path.splitext(file.path)[0]}.webp'
-        if not os.path.exists(webp_path):
+        if not file.storage.exists(webp_path):
+            # https://developers.google.com/speed/webp/docs/cwebp
             if file.name.lower().endswith('.png'):
-                subprocess.run(['cwebp', '-quiet', '-lossless', file.path, '-o', webp_path])
+                args = ['cwebp', '-quiet', '-lossless', file.path, '-o', '-']
             else:
-                subprocess.run(['cwebp', '-quiet', '-q', '80', file.path, '-o', webp_path])
+                args = ['cwebp', '-quiet', file.path, '-o', '-']
+
+            try:
+                bytes_output = subprocess.check_output(args, timeout=30)
+                file.storage.save(webp_path, ContentFile(bytes_output))
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+                pass
 
         return file
 
