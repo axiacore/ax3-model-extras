@@ -12,7 +12,7 @@ from resizeimage.imageexceptions import ImageSizeError
 
 
 class OptimizedImageField(ImageField):
-    _is_optimized = False
+    _optimized_format = None
 
     def __init__(self, *args, **kwargs):
         """
@@ -38,14 +38,20 @@ class OptimizedImageField(ImageField):
     def pre_save(self, model_instance, add):
         file = super().pre_save(model_instance, add)
 
-        if self._is_optimized:
-            webp_path = f'{os.path.splitext(file.path)[0]}.webp'
-            # https://developers.google.com/speed/webp/docs/cwebp
-            if file.name.lower().endswith('.png'):
-                args = ['cwebp', '-quiet', '-lossless', file.path, '-o', '-']
-            else:
-                args = ['cwebp', '-quiet', file.path, '-o', '-']
+        if not self._optimized_format:
+            return file
 
+        args = None
+        webp_path = f'{os.path.splitext(file.path)[0]}.webp'
+        # https://developers.google.com/speed/webp/docs/cwebp
+        if self._optimized_format == 'PNG':
+            args = ['cwebp', '-quiet', '-lossless', file.path, '-o', '-']
+        elif self._optimized_format == 'JPEG':
+            args = ['cwebp', '-quiet', file.path, '-o', '-']
+        elif self._optimized_format == 'GIF':
+            args = ['gif2webp', '-quiet', file.path, '-mixed', '-o', '-']
+
+        if args:
             try:
                 bytes_output = subprocess.check_output(args, timeout=30)
                 file.storage.save(webp_path, ContentFile(bytes_output))
@@ -96,6 +102,6 @@ class OptimizedImageField(ImageField):
         image_data.file.write(bytes_io.getvalue())
         image_data.file.truncate()
 
-        self._is_optimized = True
+        self._optimized_format = image.format
 
         return image_data
