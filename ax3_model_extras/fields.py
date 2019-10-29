@@ -12,7 +12,7 @@ from resizeimage.imageexceptions import ImageSizeError
 
 
 class OptimizedImageField(ImageField):
-    _optimized_format = None
+    _image_format = None
 
     def __init__(self, *args, **kwargs):
         """
@@ -38,25 +38,21 @@ class OptimizedImageField(ImageField):
     def pre_save(self, model_instance, add):
         file = super().pre_save(model_instance, add)
 
-        if not self._optimized_format:
+        if self._image_format == 'PNG':
+            cmd_args = ['cwebp', '-quiet', '-lossless', file.path, '-o', '-']
+        elif self._image_format == 'JPEG':
+            cmd_args = ['cwebp', '-quiet', file.path, '-o', '-']
+        elif self._image_format == 'GIF':
+            cmd_args = ['gif2webp', '-quiet', file.path, '-mixed', '-o', '-']
+        else:
             return file
 
-        args = None
-        webp_path = f'{os.path.splitext(file.path)[0]}.webp'
-        # https://developers.google.com/speed/webp/docs/cwebp
-        if self._optimized_format == 'PNG':
-            args = ['cwebp', '-quiet', '-lossless', file.path, '-o', '-']
-        elif self._optimized_format == 'JPEG':
-            args = ['cwebp', '-quiet', file.path, '-o', '-']
-        elif self._optimized_format == 'GIF':
-            args = ['gif2webp', '-quiet', file.path, '-mixed', '-o', '-']
-
-        if args:
-            try:
-                bytes_output = subprocess.check_output(args, timeout=30)
-                file.storage.save(webp_path, ContentFile(bytes_output))
-            except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
-                pass
+        try:
+            webp_path = f'{os.path.splitext(file.path)[0]}.webp'
+            bytes_output = subprocess.check_output(cmd_args, timeout=30)
+            file.storage.save(webp_path, ContentFile(bytes_output))
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+            pass
 
         return file
 
@@ -78,10 +74,11 @@ class OptimizedImageField(ImageField):
         """Optimize an image that has not been saved to a file."""
         image = Image.open(image_data)
 
-        if image.format not in self.optimized_file_formats:
+        self._image_format = image.format
+        if self._image_format not in self.optimized_file_formats:
             raise ValidationError({self.name: ['Formato de imagen no soportado']})
 
-        if image.format not in ['JPEG', 'PNG']:
+        if self._image_format not in ['JPEG', 'PNG']:
             # Only optimize JPEG and PNG images
             return image_data
 
@@ -92,16 +89,14 @@ class OptimizedImageField(ImageField):
             output_image = image
 
         # If the file extension is JPEG, convert the output_image to RGB
-        if image.format == 'JPEG':
+        if self._image_format == 'JPEG':
             output_image = output_image.convert('RGB')
 
         bytes_io = BytesIO()
-        output_image.save(bytes_io, format=image.format, optimize=True)
+        output_image.save(bytes_io, format=self._image_format, optimize=True)
 
         image_data.seek(0)
         image_data.file.write(bytes_io.getvalue())
         image_data.file.truncate()
-
-        self._optimized_format = image.format
 
         return image_data
