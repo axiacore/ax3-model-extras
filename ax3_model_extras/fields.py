@@ -67,7 +67,9 @@ class OptimizedImageField(ImageField):
     def optimize_image(self, image_data, output_size, resize_method):
         """Optimize an image that has not been saved to a file."""
         image = Image.open(image_data)
-        bytes_io = BytesIO()
+
+        if image.format not in ('JPEG', 'PNG'):
+            raise ValidationError({self.name: ['Imagen debe ser tipo JPEG o PNG']})
 
         # If output_size is set, resize the image with the selected resize_method.
         if output_size:
@@ -79,6 +81,7 @@ class OptimizedImageField(ImageField):
         if image.format == 'JPEG':
             output_image = output_image.convert('RGB')
 
+        bytes_io = BytesIO()
         output_image.save(bytes_io, format=image.format, optimize=True)
 
         image_data.seek(0)
