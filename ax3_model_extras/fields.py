@@ -12,6 +12,8 @@ from resizeimage.imageexceptions import ImageSizeError
 
 
 class OptimizedImageField(ImageField):
+    _is_optimized = False
+
     def __init__(self, *args, **kwargs):
         """
         `optimized_image_output_size` must be a tuple and `optimized_image_resize_method` can be
@@ -19,6 +21,7 @@ class OptimizedImageField(ImageField):
         """
         self.optimized_image_output_size = kwargs.pop('optimized_image_output_size', None)
         self.optimized_image_resize_method = kwargs.pop('optimized_image_resize_method', 'cover')
+        self.optimized_file_formats = kwargs.pop('optimized_file_formats', ['JPEG', 'PNG', 'GIF'])
 
         super().__init__(*args, **kwargs)
 
@@ -28,14 +31,15 @@ class OptimizedImageField(ImageField):
         # we just remove the arguments from the kwargs dict.
         kwargs.pop('optimized_image_output_size', None)
         kwargs.pop('optimized_image_resize_method', None)
+        kwargs.pop('optimized_file_formats', None)
 
         return name, path, args, kwargs
 
     def pre_save(self, model_instance, add):
         file = super().pre_save(model_instance, add)
 
-        webp_path = f'{os.path.splitext(file.path)[0]}.webp'
-        if not file.storage.exists(webp_path):
+        if self._is_optimized:
+            webp_path = f'{os.path.splitext(file.path)[0]}.webp'
             # https://developers.google.com/speed/webp/docs/cwebp
             if file.name.lower().endswith('.png'):
                 args = ['cwebp', '-quiet', '-lossless', file.path, '-o', '-']
@@ -68,8 +72,12 @@ class OptimizedImageField(ImageField):
         """Optimize an image that has not been saved to a file."""
         image = Image.open(image_data)
 
-        if image.format not in ('JPEG', 'PNG'):
-            raise ValidationError({self.name: ['Imagen debe ser tipo JPEG o PNG']})
+        if image.format not in self.optimized_file_formats:
+            raise ValidationError({self.name: ['Formato de imagen no soportado']})
+
+        if image.format not in ['JPEG', 'PNG']:
+            # Only optimize JPEG and PNG images
+            return image_data
 
         # If output_size is set, resize the image with the selected resize_method.
         if output_size:
@@ -87,5 +95,7 @@ class OptimizedImageField(ImageField):
         image_data.seek(0)
         image_data.file.write(bytes_io.getvalue())
         image_data.file.truncate()
+
+        self._is_optimized = True
 
         return image_data

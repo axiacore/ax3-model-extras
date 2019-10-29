@@ -94,6 +94,17 @@ image = OptimizedImageField(
 )
 ```
 
+
+If want to restrict the file format do (If not set it supports JPEG, PNG and GIF):
+
+```
+image = OptimizedImageField(
+    optimized_image_output_size=(1920, 800),
+    optimized_image_resize_method='thumbnail',
+    optimized_file_formats=['PNG'],
+)
+```
+
 Resize is done using https://pypi.org/project/python-resize-image/
 
 Made by Axiacore.
