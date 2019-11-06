@@ -35,7 +35,8 @@ class OptimizedImageField(ImageField):
     def pre_save(self, model_instance, add):
         image_field = super().pre_save(model_instance, add)
 
-        generate_webp(image_field=image_field)
+        if image_field:
+            generate_webp(image_field=image_field)
 
         return image_field
 
