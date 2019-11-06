@@ -33,11 +33,11 @@ class OptimizedImageField(ImageField):
         return name, path, args, kwargs
 
     def pre_save(self, model_instance, add):
-        file = super().pre_save(model_instance, add)
+        image_field = super().pre_save(model_instance, add)
 
-        generate_webp(image_field=file.image)
+        generate_webp(image_field=image_field)
 
-        return file
+        return image_field
 
     def save_form_data(self, instance, data):
         updating_image = True if data and getattr(instance, self.name) != data else False
