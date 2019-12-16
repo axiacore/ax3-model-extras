@@ -15,7 +15,7 @@ def generate_webp(image_field):
         if img.format == 'PNG':
             cmd_args = ['cwebp', '-quiet', '-lossless', image_field.path, '-o', '-']
         elif img.format == 'JPEG':
-            cmd_args = ['cwebp', '-quiet', image_field.path, '-o', '-']
+            cmd_args = ['cwebp', '-quiet', image_field.path, '-o', '-', '-q', '85']
         elif img.format == 'GIF':
             cmd_args = ['gif2webp', '-quiet', image_field.path, '-mixed', '-o', '-']
         else:
