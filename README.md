@@ -105,6 +105,18 @@ image = OptimizedImageField(
 )
 ```
 
+
+If want to specific quality of the image (If not set it default =  75):
+
+```
+image = OptimizedImageField(
+    optimized_image_output_size=(1920, 800),
+    optimized_image_resize_method='thumbnail',
+    optimized_file_formats=['PNG'],
+    optimized_image_quality=85.5,
+)
+```
+
 Resize is done using https://pypi.org/project/python-resize-image/
 
 Made by Axiacore.

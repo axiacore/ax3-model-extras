@@ -19,6 +19,7 @@ class OptimizedImageField(ImageField):
         self.optimized_image_output_size = kwargs.pop('optimized_image_output_size', None)
         self.optimized_image_resize_method = kwargs.pop('optimized_image_resize_method', 'cover')
         self.optimized_file_formats = kwargs.pop('optimized_file_formats', ['JPEG', 'PNG', 'GIF'])
+        self.optimized_image_quality = kwargs.pop('optimized_image_quality', 75)
 
         super().__init__(*args, **kwargs)
 
@@ -29,6 +30,7 @@ class OptimizedImageField(ImageField):
         kwargs.pop('optimized_image_output_size', None)
         kwargs.pop('optimized_image_resize_method', None)
         kwargs.pop('optimized_file_formats', None)
+        kwargs.pop('optimized_image_quality', None)
 
         return name, path, args, kwargs
 
@@ -36,13 +38,17 @@ class OptimizedImageField(ImageField):
         image_field = super().pre_save(model_instance, add)
 
         if image_field:
-            generate_webp(image_field=image_field)
+            generate_webp(image_field=image_field, quality=str(self.optimized_image_quality))
 
         return image_field
 
     def save_form_data(self, instance, data):
         updating_image = True if data and getattr(instance, self.name) != data else False
         if updating_image:
+
+            if self.optimized_image_quality < 0 or self.optimized_image_quality > 100:
+                raise ValidationError({self.name: ['La calidad permitida es de 0 a 100']})
+
             try:
                 data = self.optimize_image(
                     image_data=data,

@@ -1,0 +1,16 @@
+strictness: medium
+test-warnings: true
+doc-warnings: false
+autodetect: true
+member-warnings: false
+
+ignore-paths:
+  - __init__.py
+
+uses:
+  - django
+
+pep8:
+  full: true
+  options:
+    max-line-length: 100
