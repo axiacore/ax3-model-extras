@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from PIL import Image
 
 
-def generate_webp(image_field, quality=75):
+def generate_webp(image_field, quality='75'):
     """Generates a webp file. Supports PNG, JPEG and GIF files. If filepath is
     `uploads/home/sunset.png` the generated file will be `uploads/home/sunset.webp`.
     """
