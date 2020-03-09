@@ -43,7 +43,7 @@ class OptimizedImageField(ImageField):
         return image_field
 
     def save_form_data(self, instance, data):
-        updating_image = True if data and getattr(instance, self.name) != data else False
+        updating_image = data and getattr(instance, self.name) != data
         if updating_image:
 
             if self.optimized_image_quality < 0 or self.optimized_image_quality > 100:
@@ -53,14 +53,15 @@ class OptimizedImageField(ImageField):
                 data = self.optimize_image(
                     image_data=data,
                     output_size=self.optimized_image_output_size,
-                    resize_method=self.optimized_image_resize_method
+                    resize_method=self.optimized_image_resize_method,
+                    quality=self.optimized_image_quality,
                 )
             except ImageSizeError:
                 raise ValidationError({self.name: ['Imagen demasiado pequeña para ser escalada']})
 
         super().save_form_data(instance, data)
 
-    def optimize_image(self, image_data, output_size, resize_method):
+    def optimize_image(self, image_data, output_size, resize_method, quality):
         """Optimize an image that has not been saved to a file."""
         img = Image.open(image_data)
 
@@ -86,7 +87,7 @@ class OptimizedImageField(ImageField):
             output_image = output_image.convert('RGB')
 
         bytes_io = BytesIO()
-        output_image.save(bytes_io, format=img.format, optimize=True)
+        output_image.save(bytes_io, format=img.format, optimize=True, quality=quality)
 
         image_data.seek(0)
         image_data.file.write(bytes_io.getvalue())
