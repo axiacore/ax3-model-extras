@@ -1,5 +1,7 @@
 from django.core.validators import BaseValidator
 
+import magic
+
 
 class FileSizeValidator(BaseValidator):
     """Validate a file size. Size must be given in KB.
@@ -26,3 +28,18 @@ class ImageDimensionValidator(BaseValidator):
             return a.width != width
 
         return a.width != width or a.height != height
+
+
+class MimetypeValidator(BaseValidator):
+    """
+    Validate a file mimetype.
+    """
+    message = 'El documento no tiene el formato correcto'
+    code = 'file_mimetype'
+
+    def compare(self, a, b):
+        try:
+            mime = magic.from_buffer(a.read(), mime=True)
+            return mime not in b
+        except AttributeError:
+            return True
