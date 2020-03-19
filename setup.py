@@ -1,6 +1,6 @@
 import setuptools
 
-__VERSION__ = '1.2.3'
+__VERSION__ = '1.2.4'
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
@@ -15,7 +15,7 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url='https://github.com/Axiacore/ax3-model-extras',
     packages=setuptools.find_packages(),
-    install_requires=['python-resize-image'],
+    install_requires=['python-resize-image', 'python_magic'],
     classifiers=[
         'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: MIT License',
