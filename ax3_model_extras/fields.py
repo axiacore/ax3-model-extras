@@ -76,6 +76,12 @@ class OptimizedImageField(ImageField):
         if img.format not in ['JPEG', 'PNG']:
             return image_data
 
+        # If output_size content 0.
+        if output_size and output_size[0] == 0:
+            output_size = (img.width, output_size[1])
+        elif output_size and output_size[1] == 0:
+            output_size = (output_size[0], img.height)
+
         # If output_size is set, resize the image with the selected resize_method.
         if output_size and output_size != (img.width, img.height):
             output_image = resizeimage.resize(resize_method, img, output_size)
