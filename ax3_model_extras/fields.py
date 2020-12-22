@@ -58,6 +58,8 @@ class OptimizedImageField(ImageField):
                 )
             except ImageSizeError:
                 raise ValidationError({self.name: ['Imagen demasiado pequeña para ser escalada']})
+            except OSError:
+                raise ValidationError({self.name: ['La imagen es inválida o está dañada']})
 
         super().save_form_data(instance, data)
 
