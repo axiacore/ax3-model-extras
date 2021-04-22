@@ -2,7 +2,7 @@ from io import BytesIO
 
 from django.core.exceptions import ValidationError
 from django.db.models import ImageField
-
+from django.utils.translation import gettext_lazy as _
 from PIL import Image
 from resizeimage import resizeimage
 from resizeimage.imageexceptions import ImageSizeError
@@ -47,7 +47,7 @@ class OptimizedImageField(ImageField):
         if updating_image:
 
             if self.optimized_image_quality < 0 or self.optimized_image_quality > 100:
-                raise ValidationError({self.name: ['La calidad permitida es de 0 a 100']})
+                raise ValidationError({self.name: [_('The allowed quality is from 0 to 100')]})
 
             try:
                 data = self.optimize_image(
@@ -57,9 +57,9 @@ class OptimizedImageField(ImageField):
                     quality=self.optimized_image_quality,
                 )
             except ImageSizeError:
-                raise ValidationError({self.name: ['Imagen demasiado pequeña para ser escalada']})
+                raise ValidationError({self.name: [_('Image too small to be scaled')]})
             except OSError:
-                raise ValidationError({self.name: ['La imagen es inválida o está dañada']})
+                raise ValidationError({self.name: [_('The image is invalid or corrupted')]})
 
         super().save_form_data(instance, data)
 
@@ -68,11 +68,11 @@ class OptimizedImageField(ImageField):
         img = Image.open(image_data)
 
         if img.format not in self.optimized_file_formats:
-            raise ValidationError({self.name: ['Formato de imagen no soportado']})
+            raise ValidationError({self.name: [_('Image format unsupported')]})
 
         # GIF files needs strict size validation
         if img.format == 'GIF' and output_size and output_size != (img.width, img.height):
-            raise ValidationError({self.name: ['Tamaño de imagen GIF no soportado']})
+            raise ValidationError({self.name: [_('GIF image size unsupported')]})
 
         # Check if is a supported format for optimization
         if img.format not in ['JPEG', 'PNG']:

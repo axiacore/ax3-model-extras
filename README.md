@@ -1,10 +1,22 @@
 # AX3 Model Extras
 
+## Installation
+AX3 Model Extras is easy to install from the PyPI package:
+
+```bash
+$ pip install ax3-model-extras
+```
+
+After installing the package, the project settings need to be configured.
+add `ax3_model_extras` to your `INSTALLED_APPS`
+
+    `INSTALLED_APPS += [ax3_model_extras]`
+
 ## Validate image size
 
 If you want to validate the dimension and file size for images:
 
-```
+```python
 from ax3_model_extras.validators import FileSizeValidator, ImageDimensionValidator
 
 
@@ -21,7 +33,7 @@ class Post(models.Model):
 
 If you want to validate one dimension, you have to send the other dimension with 0
 
-```
+```python
 from ax3_model_extras.validators import FileSizeValidator, ImageDimensionValidator
 
 
@@ -42,7 +54,7 @@ class Post(models.Model):
 
 If you want to improve the local file storage or use S3 upload:
 
-```
+```python
 from ax3_model_extras.storages import get_storage, get_upload_path
 
 
@@ -62,7 +74,7 @@ class Post(models.Model):
 
 Use as:
 
-```
+```python
 from ax3_model_extras.fields import OptimizedImageField
 
 
@@ -78,7 +90,7 @@ class Post(models.Model):
 
 If want to set the size of the image using the 'cover' method do:
 
-```
+```python
 image = OptimizedImageField(
     optimized_image_output_size=(1920, 800),
 )
@@ -87,7 +99,7 @@ image = OptimizedImageField(
 
 If want to set the size of the image using the 'thumbnail' method do:
 
-```
+```python
 image = OptimizedImageField(
     optimized_image_output_size=(1920, 800),
     optimized_image_resize_method='thumbnail',
@@ -97,7 +109,7 @@ image = OptimizedImageField(
 
 If want to restrict the file format do (If not set it supports JPEG, PNG and GIF):
 
-```
+```python
 image = OptimizedImageField(
     optimized_image_output_size=(1920, 800),
     optimized_image_resize_method='thumbnail',
@@ -108,7 +120,7 @@ image = OptimizedImageField(
 
 If want to specific quality of the image (If not set it default =  75):
 
-```
+```python
 image = OptimizedImageField(
     optimized_image_output_size=(1920, 800),
     optimized_image_resize_method='thumbnail',

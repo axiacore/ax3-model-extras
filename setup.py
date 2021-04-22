@@ -1,21 +1,29 @@
+import os
+
 import setuptools
 
-__VERSION__ = '1.2.6'
+__VERSION__ = '1.3.6'
 
 with open('README.md', 'r') as fh:
     long_description = fh.read()
+
+os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setuptools.setup(
     name='AX3 model extras',
     version=__VERSION__,
     author='Axiacore',
     author_email='info@axiacore.com',
-    description='Extras for AX3 models',
+    description='Django app extras for AX3 models',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/Axiacore/ax3-model-extras',
     packages=setuptools.find_packages(),
-    install_requires=['python-resize-image', 'python_magic'],
+    install_requires=[
+        'django >= 3.2',
+        'python-resize-image',
+        'python_magic'
+    ],
     classifiers=[
         'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: MIT License',
