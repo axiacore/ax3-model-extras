@@ -1,0 +1,51 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-22 15:08+0000\n"
+"PO-Revision-Date: 2021-04-22 10:24-0500\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: Felipe Gonzalez <felipe.gonzalez@axiacore.com>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.4.2\n"
+
+#: fields.py:50
+msgid "The allowed quality is from 0 to 100"
+msgstr "La calidad permitida es de 0 a 100"
+
+#: fields.py:60
+msgid "Image too small to be scaled"
+msgstr "Imagen demasiado pequeña para ser escalada"
+
+#: fields.py:62
+msgid "The image is invalid or corrupted"
+msgstr "La imagen no es válida o está dañada"
+
+#: fields.py:71
+msgid "Image format unsupported"
+msgstr "Formato de imagen no soportado"
+
+#: fields.py:75
+msgid "GIF image size unsupported"
+msgstr "Tamaño de imagen GIF no soportado"
+
+#: validators.py:9
+msgid "The weight of the file must be less than the maximum allowed size"
+msgstr "El peso del archivo debe ser menor al tamaño máximo permitido"
+
+#: validators.py:19
+msgid "The image must have the specified dimensions"
+msgstr "La imagen debe tener las dimensiones especificadas"
+
+#: validators.py:37
+msgid "The document does not have the correct format"
+msgstr "El documento no tiene el formato correcto"
