@@ -15,6 +15,7 @@ setuptools.setup(
     author='Axiacore',
     author_email='info@axiacore.com',
     description='Django app extras for AX3 models',
+    include_package_data=True,
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/Axiacore/ax3-model-extras',

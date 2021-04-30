@@ -7,6 +7,16 @@ AX3 Model Extras is easy to install from the PyPI package:
 $ pip install ax3-model-extras
 ```
 
+To enable ax3_model_extras in your project you need to add it to INSTALLED_APPS in your projects settings.py file:
+
+```python
+INSTALLED_APPS = (
+    ...
+    'ax3_model_extras',
+    ...
+)
+```
+
 ## Validate image size
 
 If you want to validate the dimension and file size for images:

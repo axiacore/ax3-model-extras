@@ -1,0 +1,2 @@
+recursive-include ax3_model_extras/locale *.po *.mo
+include LICENSE
