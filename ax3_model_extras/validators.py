@@ -30,6 +30,23 @@ class ImageDimensionValidator(BaseValidator):
         return a.width != width or a.height != height
 
 
+class ImageMinDimensionValidator(BaseValidator):
+    """Validate an image dimensions. Should receive a tuple like (width, height).
+    """
+    message = _('The image must have at least the specified dimensions')
+    code = 'file_dimension'
+
+    def compare(self, a, b):
+        width, height = b
+        if width == 0:
+            return a.height <= height
+
+        if height == 0:
+            return a.width <= width
+
+        return a.width <= width or a.height <= height
+
+
 class MimetypeValidator(BaseValidator):
     """
     Validate a file mimetype.
