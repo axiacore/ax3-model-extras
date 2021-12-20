@@ -46,6 +46,10 @@ msgstr "El peso del archivo debe ser menor al tamaño máximo permitido"
 msgid "The image must have the specified dimensions"
 msgstr "La imagen debe tener las dimensiones especificadas"
 
-#: validators.py:37
+#: validators.py:36
+msgid "The image must have at least the specified dimensions"
+msgstr "La imagen debe tener al menos las dimensiones especificadas."
+
+#: validators.py:54
 msgid "The document does not have the correct format"
 msgstr "El documento no tiene el formato correcto"
