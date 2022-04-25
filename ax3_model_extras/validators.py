@@ -1,5 +1,8 @@
 import magic
+import phonenumbers
+from django.core.exceptions import ValidationError
 from django.core.validators import BaseValidator
+from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
 
 
@@ -60,3 +63,33 @@ class MimetypeValidator(BaseValidator):
             return mime not in b
         except AttributeError:
             return True
+
+
+@deconstructible
+class PhoneNumberValidator:
+    message = _('Invalid phone number.')
+    code = 'invalid_phone_number'
+
+    def __init__(self, iso_code, message=None, code=None):
+        self.iso_code = iso_code
+
+        if message is not None:
+            self.message = message
+        if code is not None:
+            self.code = code
+
+    def __call__(self, value):
+        try:
+            mobile_number = phonenumbers.parse(str(value), self.iso_code)
+
+            if not phonenumbers.is_valid_number(mobile_number):
+                raise ValidationError(self.message, code=self.code)
+
+        except phonenumbers.NumberParseException as exc:
+            raise ValidationError(str(exc), code=self.code) from exc
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, self.__class__) and self.iso_code == other.iso_code
+            and self.message == other.message and self.code == other.code
+        )

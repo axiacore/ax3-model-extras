@@ -1,7 +1,7 @@
 [MASTER]
 profile=no
 persistent=yes
-ignore=migrations__init__.py
+ignore=migrations,__init__.py
 cache-size=500
 
 [MESSAGES CONTROL]
@@ -20,7 +20,7 @@ cache-size=500
 # E1101 Instace XX has no YY member (Django create members on the fly)
 # E1103 Instace of list has no YY member (Django create members on the fly)
 # E1120 Weird behavior with class based views
-disable=C0111,C1001,I0011,I0012,W0704,W0142,W0212,W0201,W0232,W0613,W0702,R0201,R0801,R0924,E1101,E1002,E1103,E1120,C0330,R0901
+disable=C0111,C1001,I0011,I0012,W0704,W0142,W0212,W0201,W0232,W0613,W0702,R0201,R0801,R0924,E1101,E1002,E1103,E1120,C0330,R0901,C0415
 
 [REPORTS]
 output-format=parseable

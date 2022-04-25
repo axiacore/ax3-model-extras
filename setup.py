@@ -23,7 +23,8 @@ setuptools.setup(
     install_requires=[
         'django >= 3.2',
         'python-resize-image',
-        'python_magic'
+        'python_magic',
+        'phonenumbers',
     ],
     classifiers=[
         'Programming Language :: Python :: 3.6',

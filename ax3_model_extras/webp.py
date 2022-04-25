@@ -2,7 +2,6 @@ import os.path
 import subprocess
 
 from django.core.files.base import ContentFile
-
 from PIL import Image
 
 
