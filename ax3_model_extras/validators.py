@@ -59,7 +59,7 @@ class MimetypeValidator(BaseValidator):
 
     def compare(self, a, b):
         try:
-            mime = magic.from_buffer(a.read(), mime=True)
+            mime = magic.from_buffer(a.open().read(2048), mime=True)
             return mime not in b
         except AttributeError:
             return True
