@@ -4,7 +4,7 @@ import setuptools
 
 __VERSION__ = '1.5.3'
 
-with open('README.md', 'r') as fh:
+with open('README.md') as fh:
     long_description = fh.read()
 
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
