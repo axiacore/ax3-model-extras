@@ -14,6 +14,18 @@ repos:
   - id: commitizen
     stages: [commit-msg]
 
+- repo: https://github.com/asottile/pyupgrade
+  rev: "v3.3.1"
+  hooks:
+  - id: pyupgrade
+    args: [--py38-plus]
+
+- repo: https://github.com/adamchainz/django-upgrade
+  rev: "1.12.0"
+  hooks:
+  - id: django-upgrade
+    args: [--target-version, "4.1"]
+
 - repo: https://github.com/pre-commit/mirrors-yapf
   rev: v0.32.0
   hooks:
