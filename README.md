@@ -1,6 +1,7 @@
 # AX3 Model Extras
 
 ## Installation
+
 AX3 Model Extras is easy to install from the PyPI package:
 
 ```bash
@@ -53,8 +54,6 @@ class Post(models.Model):
     )
 ```
 
-
-
 ## Improve file storage
 
 If you want to improve the local file storage or use S3 upload:
@@ -74,7 +73,6 @@ class Post(models.Model):
     )
 ```
 
-
 ## Optimize images before upload them.
 
 Use as:
@@ -92,7 +90,6 @@ class Post(models.Model):
 
 ```
 
-
 If want to set the size of the image using the 'cover' method do:
 
 ```python
@@ -100,7 +97,6 @@ image = OptimizedImageField(
     optimized_image_output_size=(1920, 800),
 )
 ```
-
 
 If want to set the size of the image using the 'thumbnail' method do:
 
@@ -111,7 +107,6 @@ image = OptimizedImageField(
 )
 ```
 
-
 If want to restrict the file format do (If not set it supports JPEG, PNG and GIF):
 
 ```python
@@ -121,7 +116,6 @@ image = OptimizedImageField(
     optimized_file_formats=['PNG'],
 )
 ```
-
 
 If want to specific quality of the image (If not set it default =  75):
 
@@ -134,6 +128,15 @@ image = OptimizedImageField(
 )
 ```
 
-Resize is done using https://pypi.org/project/python-resize-image/
+Resize is done using [python-resize-image](https://pypi.org/project/python-resize-image/)
 
-Made by Axiacore.
+## Releasing a new version
+
+Make sure you increase the version number and create a git tag:
+
+```bash
+$ python3 -m pip install --user --upgrade setuptools wheel twine
+$ ./release.sh
+```
+
+Made by [Axiacore](https://axiacore.com).

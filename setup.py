@@ -24,7 +24,6 @@ setuptools.setup(
         'django >= 3.2',
         'python-resize-image',
         'python_magic',
-        'phonenumberslite',
     ],
     classifiers=[
         'Programming Language :: Python :: 3.6',
