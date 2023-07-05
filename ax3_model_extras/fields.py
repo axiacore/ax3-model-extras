@@ -7,8 +7,6 @@ from PIL import Image
 from resizeimage import resizeimage
 from resizeimage.imageexceptions import ImageSizeError
 
-from .webp import generate_webp
-
 
 class OptimizedImageField(ImageField):
     def __init__(self, *args, **kwargs):
@@ -33,14 +31,6 @@ class OptimizedImageField(ImageField):
         kwargs.pop('optimized_image_quality', None)
 
         return name, path, args, kwargs
-
-    def pre_save(self, model_instance, add):
-        image_field = super().pre_save(model_instance, add)
-
-        if image_field:
-            generate_webp(image_field=image_field, quality=str(self.optimized_image_quality))
-
-        return image_field
 
     def save_form_data(self, instance, data):
         updating_image = data and getattr(instance, self.name) != data
