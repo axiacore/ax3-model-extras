@@ -132,6 +132,8 @@ Resize is done using [python-resize-image](https://pypi.org/project/python-resiz
 
 ## Releasing a new version
 
+Make sure you have an API Token for PyPI: https://pypi.org/help/#apitoken
+
 Make sure you increase the version number and create a git tag:
 
 ```bash
