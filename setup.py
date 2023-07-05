@@ -2,7 +2,7 @@ import os
 
 import setuptools
 
-__VERSION__ = '1.5.3'
+__VERSION__ = '2.0.0'
 
 with open('README.md') as fh:
     long_description = fh.read()
@@ -18,7 +18,7 @@ setuptools.setup(
     include_package_data=True,
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/Axiacore/ax3-model-extras',
+    url='https://github.com/axiacore/ax3-model-extras',
     packages=setuptools.find_packages(),
     install_requires=[
         'django >= 3.2',
