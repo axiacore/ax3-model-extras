@@ -10,7 +10,7 @@ with open('README.md') as fh:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setuptools.setup(
-    name='AX3 model extras',
+    name='ax3-model-extras',
     version=__VERSION__,
     author='Axiacore',
     author_email='info@axiacore.com',
