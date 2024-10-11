@@ -2,7 +2,7 @@ import os
 
 import setuptools
 
-__VERSION__ = '2.0.0'
+__VERSION__ = '2.0.1'
 
 with open('README.md') as fh:
     long_description = fh.read()
@@ -23,7 +23,6 @@ setuptools.setup(
     install_requires=[
         'django >= 3.2',
         'python-resize-image',
-        'python_magic',
     ],
     classifiers=[
         'Programming Language :: Python :: 3.6',

@@ -1,4 +1,3 @@
-import magic
 from django.core.validators import BaseValidator
 from django.utils.translation import gettext_lazy as _
 
@@ -55,6 +54,14 @@ class MimetypeValidator(BaseValidator):
     code = 'file_mimetype'
 
     def compare(self, a, b):
+        try:
+            import magic
+        except ImportError as e:
+            raise ImportError(
+                "The 'python-magic' library is required for this functionality. "
+                "Additionally, ensure that the 'libmagic' library is installed on your system. "
+            ) from e
+
         try:
             mime = magic.from_buffer(a.open().read(2048), mime=True)
             return mime not in b
